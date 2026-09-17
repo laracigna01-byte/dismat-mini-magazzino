@@ -1,0 +1,110 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h1 class="h2">Nuovo articolo</h1>
+    <p class="text-secondary">
+        Inserisci i dati del nuovo articolo.
+    </p>
+</div>
+
+<div class="card form-card shadow-sm">
+    <div class="card-body p-4">
+
+        <form method="POST">
+
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <label class="form-label">Codice</label>
+                    <input type="text"
+                           name="codice"
+                           class="form-control"
+                           required>
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label">Nome articolo</label>
+                    <input type="text"
+                           name="nome"
+                           class="form-control"
+                           required>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Descrizione</label>
+                    <textarea name="descrizione"
+                              class="form-control"></textarea>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Quantità</label>
+                    <input type="number"
+                           step="0.01"
+                           name="quantita"
+                           class="form-control"
+                           required>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Scorta minima</label>
+                    <input type="number"
+                           step="0.01"
+                           name="scorta_minima"
+                           class="form-control"
+                           required>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Unità di misura</label>
+
+                    <select name="unita_misura"
+                            class="form-select"
+                            required>
+                        <option value="pz">pz</option>
+                        <option value="kg">kg</option>
+                        <option value="m">m</option>
+                        <option value="l">l</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Categoria</label>
+
+                    <select name="categoria_id"
+                            class="form-select"
+                            required>
+
+                        {% for categoria in categorie %}
+                            <option value="{{ categoria.id }}">
+                                {{ categoria.nome }}
+                            </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="mt-4">
+
+                <button type="submit"
+                        class="btn btn-warning fw-semibold">
+                    Salva articolo
+                </button>
+
+                <a href="/"
+                   class="btn btn-light ms-2">
+                    Annulla
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}
+

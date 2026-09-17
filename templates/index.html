@@ -1,0 +1,154 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-heading">
+
+    <div class="eyebrow">
+        DISMAT • SISTEMA INTERNO
+    </div>
+
+    <h1 class="neon-title">
+        DASHBOARD MAGAZZINO
+    </h1>
+
+    <p class="dashboard-subtitle">
+        Gestione articoli, scorte e movimenti
+    </p>
+
+</div>
+
+
+<div class="row g-3 mb-4">
+
+    <div class="col-md-4">
+
+        <div class="card stat-card">
+
+            <div class="card-body">
+
+                <div class="stat-icon">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+
+                <span class="stat-label">
+                    Articoli
+                </span>
+
+                <div class="stat-value">
+                    {{ articoli|length }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card stat-card">
+
+            <div class="card-body">
+
+                <div class="stat-icon">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+
+                <span class="stat-label">
+                    Scorte basse
+                </span>
+
+                <div class="stat-value">
+                    -
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card stat-card">
+
+            <div class="card-body">
+
+                <div class="stat-icon">
+                    <i class="bi bi-arrow-left-right"></i>
+                </div>
+
+                <span class="stat-label">
+                    Movimenti
+                </span>
+
+                <div class="stat-value">
+                    -
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card inventory-card">
+
+    <div class="card-header inventory-header">
+
+        <div>
+
+            <div class="inventory-title">
+                GESTIONE MAGAZZINO
+            </div>
+
+            <small class="inventory-subtitle">
+                Accesso rapido alle principali funzioni
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body p-4">
+
+        <div class="d-flex flex-wrap gap-3">
+
+            <a href="{{ url_for('articoli') }}"
+               class="btn btn-warning add-button">
+
+                <i class="bi bi-box-seam me-1"></i>
+                Gestisci articoli
+
+            </a>
+
+            <a href="{{ url_for('nuovo_articolo') }}"
+               class="btn btn-warning add-button">
+
+                <i class="bi bi-plus-lg me-1"></i>
+                Nuovo articolo
+
+            </a>
+
+            <a href="{{ url_for('archivio_articoli') }}"
+               class="btn btn-warning add-button">
+
+                <i class="bi bi-archive me-1"></i>
+                Archivio
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

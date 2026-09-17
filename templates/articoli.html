@@ -1,0 +1,164 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-heading">
+
+    <div class="eyebrow">
+        DISMAT • SISTEMA INTERNO
+    </div>
+
+    <h1 class="neon-title">
+        ARTICOLI
+    </h1>
+
+    <p class="dashboard-subtitle">
+        Gestione degli articoli attivi del magazzino
+    </p>
+
+</div>
+
+
+<div class="card inventory-card">
+
+    <div class="card-header inventory-header">
+
+        <div>
+            <div class="inventory-title">
+                ARTICOLI ATTIVI
+            </div>
+
+            <small class="inventory-subtitle">
+                Elenco degli articoli presenti nel magazzino
+            </small>
+        </div>
+
+        <a href="{{ url_for('nuovo_articolo') }}"
+           class="btn btn-warning add-button">
+
+            <i class="bi bi-plus-lg me-1"></i>
+            Nuovo articolo
+
+        </a>
+
+    </div>
+
+
+    {% if articoli %}
+
+    <div class="mobile-scroll-hint">
+        <i class="bi bi-arrow-left-right"></i>
+        Scorri orizzontalmente per vedere tutte le colonne
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table inventory-table align-middle">
+
+            <thead>
+                <tr>
+                    <th scope="col">Codice</th>
+                    <th scope="col">Articolo</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Quantità</th>
+                    <th scope="col" class="status-cell">Stato</th>
+                    <th scope="col" class="actions-cell">Azioni</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for articolo in articoli %}
+
+                <tr>
+
+                    <td class="article-code">
+                        {{ articolo.codice }}
+                    </td>
+
+                    <td class="fw-semibold">
+                        {{ articolo.nome }}
+                    </td>
+
+                    <td>
+                        {{ articolo.categoria }}
+                    </td>
+
+                    <td>
+                        {% if articolo.unita_misura == "pz" %}
+                            {{ articolo.quantita|int }} pz
+                        {% else %}
+                            {{ articolo.quantita }}
+                            {{ articolo.unita_misura }}
+                        {% endif %}
+                    </td>
+
+                    <td class="status-cell">
+
+                        {% if articolo.quantita <= articolo.scorta_minima %}
+
+                            <span class="badge text-bg-danger pill-ui">
+                                Scorta bassa
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge text-bg-success pill-ui">
+                                Disponibile
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td class="actions-cell">
+
+                        <div class="actions-stack">
+
+                            <a href="{{ url_for('dettaglio_articolo', id=articolo.id) }}"
+                               class="btn btn-warning pill-ui">
+                                Dettagli
+                            </a>
+
+                            <a href="{{ url_for('modifica', id=articolo.id) }}"
+                               class="btn btn-warning pill-ui">
+                                Modifica
+                            </a>
+
+                            <form method="POST"
+                                  action="{{ url_for('disattiva', id=articolo.id) }}"
+                                  onsubmit="return confirm('Vuoi disattivare questo articolo?');">
+
+                                <button type="submit"
+                                        class="btn btn-danger pill-ui">
+                                    Disattiva
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="p-4 text-secondary">
+        Nessun articolo attivo.
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
+

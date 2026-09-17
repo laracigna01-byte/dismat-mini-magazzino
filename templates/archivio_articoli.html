@@ -1,0 +1,130 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-heading">
+
+    <div class="eyebrow">
+        DISMAT • SISTEMA INTERNO
+    </div>
+
+    <h1 class="neon-title">
+        ARCHIVIO ARTICOLI
+    </h1>
+
+    <p class="dashboard-subtitle">
+        Articoli disattivati e conservati nello storico
+    </p>
+
+</div>
+
+
+<div class="card inventory-card">
+
+    <div class="card-header inventory-header">
+
+        <div>
+            <div class="inventory-title">
+                ARTICOLI DISATTIVATI
+            </div>
+
+            <small class="inventory-subtitle">
+                I record restano memorizzati nel database
+            </small>
+        </div>
+
+        <a href="{{ url_for('home') }}"
+           class="btn btn-warning add-button">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Torna alla dashboard
+
+        </a>
+
+    </div>
+
+
+    {% if articoli %}
+
+    <div class="mobile-scroll-hint">
+        <i class="bi bi-arrow-left-right"></i>
+        Scorri orizzontalmente per vedere tutte le colonne
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table inventory-table align-middle">
+
+            <thead>
+                <tr>
+                    <th scope="col">Codice</th>
+                    <th scope="col">Articolo</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Quantità</th>
+                    <th scope="col" class="actions-cell">Azioni</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for articolo in articoli %}
+
+                <tr>
+
+                    <td class="article-code">
+                        {{ articolo.codice }}
+                    </td>
+
+                    <td class="fw-semibold">
+                        {{ articolo.nome }}
+                    </td>
+
+                    <td>
+                        {{ articolo.categoria }}
+                    </td>
+
+                    <td>
+                        {% if articolo.unita_misura == "pz" %}
+                            {{ articolo.quantita|int }} pz
+                        {% else %}
+                            {{ articolo.quantita }}
+                            {{ articolo.unita_misura }}
+                        {% endif %}
+                    </td>
+
+                    <td class="actions-cell">
+
+                        <form method="POST"
+                              action="{{ url_for('riattiva', id=articolo.id) }}"
+                              onsubmit="return confirm('Vuoi riattivare questo articolo?');">
+
+                            <button type="submit"
+                                    class="btn btn-warning pill-ui">
+                                Riattiva
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="p-4 text-secondary">
+        Nessun articolo disattivato.
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
