@@ -208,6 +208,11 @@ classDiagram
         email
     }
 
+    class ArticoloFornitore {
+        articolo_id
+        fornitore_id
+    }
+
     class FotoArticolo {
         id
         nome_file
@@ -225,7 +230,8 @@ classDiagram
     }
 
     Categoria "1" --> "0..*" Articolo
-    Articolo "0..*" --> "0..*" Fornitore
+    Articolo "1" --> "0..*" ArticoloFornitore
+    Fornitore "1" --> "0..*" ArticoloFornitore
     Articolo "1" --> "0..*" FotoArticolo
     Articolo "1" --> "0..*" Movimento
     Utente "1" --> "0..*" Movimento
