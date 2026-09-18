@@ -1,93 +1,104 @@
 ﻿# DISMAT Mini Magazzino
 
-Applicazione web didattica per la gestione di un piccolo magazzino, realizzata con Flask e MySQL.
+Applicazione web didattica per la gestione di un piccolo magazzino interno, sviluppata con Python, Flask e MySQL.
 
-## Struttura MVC
+Il sistema gestisce articoli, giacenze, movimenti, fornitori, fotografie, autenticazione e un assistente interno denominato Martin.
 
-### CONTROLLER
-app.py
+## Funzionalita principali
+
+- registrazione utenti;
+- login e logout;
+- protezione delle pagine tramite sessione Flask;
+- dashboard con dati reali;
+- gestione articoli;
+- archivio e riattivazione degli articoli;
+- gestione della scorta minima;
+- registrazione di entrate e uscite;
+- aggiornamento automatico della giacenza;
+- storico dei movimenti;
+- controllo della disponibilita prima di un'uscita;
+- gestione fornitori;
+- relazione molti-a-molti tra articoli e fornitori;
+- caricamento e gestione fotografie;
+- foto principale dell'articolo;
+- tema chiaro e scuro;
+- interfaccia responsive;
+- assistente Martin con ricerca controllata sui dati del sistema.
+
+## Architettura
+
+Il progetto segue una struttura ispirata al modello MVC.
+
+### Controller
+
+`app.py`
 
 Gestisce:
-- route Flask
-- richieste GET e POST
-- form
-- sessione
-- login e logout
-- redirect
-- collegamento tra Model e View
 
-### MODEL
-models.py
+- route Flask;
+- richieste GET e POST;
+- form;
+- sessioni;
+- autenticazione;
+- validazioni;
+- redirect;
+- endpoint JSON dell'assistente.
 
-Contiene:
-- funzioni Python per l'accesso ai dati
-- query SQL
-- gestione articoli
-- gestione utenti
-- gestione movimenti
+### Model
 
-db.py
+`models.py`
 
-Gestisce la connessione al database MySQL tramite get_db().
+Contiene le funzioni Python che comunicano con MySQL e le query SQL relative a:
 
-### VIEW
-templates/
+- articoli;
+- categorie;
+- utenti;
+- fotografie;
+- movimenti;
+- fornitori;
+- relazioni articolo-fornitore.
 
-Contiene le pagine HTML e i template Jinja2.
+Le query utilizzano parametri `%s`.
 
-static/
+`db.py`
 
-Contiene:
-- CSS
-- JavaScript
-- immagini
-- file caricati
+Gestisce la connessione MySQL tramite `get_db()` e legge i parametri dal file `.env`.
 
-## Schema
+### Logica assistente
 
-Browser
-  |
-  v
-Controller - app.py
-  |
-  +--> Model - models.py
-  |       |
-  |       v
-  |     MySQL
-  |
-  v
-View - templates + static
-  |
-  v
-Browser
+`assistente.py`
 
-## Tecnologie
+Contiene la logica di Martin.
 
-- Python
-- Flask
-- MySQL
-- Jinja2
-- Bootstrap 5
-- CSS
-- JavaScript
-- Werkzeug
-- python-dotenv
-- mysql-connector-python
+Martin utilizza una ricerca controllata sugli articoli e sui fornitori, con supporto a confronti approssimativi tramite `SequenceMatcher`.
 
-## Principio del progetto
+Non genera query SQL libere e non inventa dati: le informazioni vengono recuperate tramite le funzioni presenti nel Model.
 
-Il progetto è mantenuto volutamente semplice: poche funzioni, responsabilità chiare e codice facilmente leggibile e spiegabile.
+### View
 
-## Albero del progetto
+`templates/`
+
+Contiene i template HTML e Jinja2.
+
+`static/`
+
+Contiene CSS, JavaScript, immagini e file caricati.
+
+## Struttura progetto
 
 ```text
 dismat-magazzino/
 |
-|-- app.py                  CONTROLLER
-|-- models.py               MODEL
-|-- db.py                   Supporto database
+|-- app.py
+|-- models.py
+|-- db.py
+|-- assistente.py
+|-- test_db.py
 |
-|-- templates/              VIEW
+|-- database/
+|   `-- schema.sql
+|
+|-- templates/
 |   |-- base.html
 |   |-- index.html
 |   |-- articoli.html
@@ -96,143 +107,25 @@ dismat-magazzino/
 |   |-- dettaglio_articolo.html
 |   |-- archivio_articoli.html
 |   |-- movimenti.html
+|   |-- fornitori.html
+|   |-- nuovo_fornitore.html
+|   |-- modifica_fornitore.html
 |   |-- login.html
 |   `-- register.html
 |
-|-- static/                 VIEW
+|-- static/
 |   |-- css/
+|   |   `-- style.css
 |   |-- js/
+|   |   |-- theme.js
+|   |   `-- assistente.js
 |   |-- images/
+|   |   |-- logo-dismat.jpeg
+|   |   `-- martin.png
 |   `-- uploads/
+|       `-- .gitkeep
 |
-|-- requirements.txt
+|-- .env.example
 |-- .gitignore
+|-- requirements.txt
 `-- README.md
-```
-
-## Diagrammi UML
-
-### Use Case
-
-```mermaid
-flowchart LR
-    U[Utente]
-
-    U --> A[Registrazione e Login]
-    U --> B[Visualizza Dashboard]
-    U --> C[Gestisce Articoli]
-    U --> D[Gestisce Foto]
-    U --> E[Consulta Archivio]
-    U --> F[Registra Movimenti]
-    U --> G[Logout]
-```
-
-### Activity Diagram - Registrazione di un movimento
-
-```mermaid
-flowchart TD
-    A[Utente apre Movimenti] --> B[Seleziona articolo]
-    B --> C[Seleziona Entrata o Uscita]
-    C --> D[Inserisce quantita]
-    D --> E{Quantita valida?}
-
-    E -- No --> F[Mostra errore]
-    E -- Si --> G{Tipo movimento}
-
-    G -- Entrata --> H[Aumenta giacenza]
-    G -- Uscita --> I{Giacenza sufficiente?}
-
-    I -- No --> F
-    I -- Si --> J[Diminuisce giacenza]
-
-    H --> K[Registra movimento]
-    J --> K
-
-    K --> L[Aggiorna storico]
-```
-
-### Sequence Diagram - Registrazione di un movimento
-
-```mermaid
-sequenceDiagram
-    actor U as Utente
-    participant V as View
-    participant C as app.py
-    participant M as models.py
-    participant DB as MySQL
-
-    U->>V: Compila il form
-    V->>C: POST /movimenti
-    C->>M: registra_movimento()
-    M->>DB: UPDATE articolo
-    M->>DB: INSERT movimento
-    DB-->>M: Operazione completata
-    M-->>C: True
-    C-->>V: Redirect /movimenti
-    V-->>U: Mostra storico aggiornato
-```
-
-### Modello delle entita
-
-```mermaid
-classDiagram
-
-    class Utente {
-        id
-        username
-        password_hash
-        nome
-    }
-
-    class Categoria {
-        id
-        nome
-        descrizione
-    }
-
-    class Articolo {
-        id
-        codice
-        nome
-        quantita
-        scorta_minima
-        unita_misura
-        attivo
-    }
-
-    class Fornitore {
-        id
-        ragione_sociale
-        referente
-        telefono
-        email
-    }
-
-    class ArticoloFornitore {
-        articolo_id
-        fornitore_id
-    }
-
-    class FotoArticolo {
-        id
-        nome_file
-        didascalia
-        principale
-        attiva
-    }
-
-    class Movimento {
-        id
-        tipo
-        quantita
-        data_movimento
-        note
-    }
-
-    Categoria "1" --> "0..*" Articolo
-    Articolo "1" --> "0..*" ArticoloFornitore
-    Fornitore "1" --> "0..*" ArticoloFornitore
-    Articolo "1" --> "0..*" FotoArticolo
-    Articolo "1" --> "0..*" Movimento
-    Utente "1" --> "0..*" Movimento
-```

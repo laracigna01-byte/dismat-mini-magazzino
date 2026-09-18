@@ -33,6 +33,9 @@ from models import (
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 
+# Dimensione massima consentita per i file caricati: 5 MB
+app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
+
 
 @app.before_request
 def richiedi_login():
@@ -233,30 +236,40 @@ def articoli():
 
 @app.route("/articoli/nuovo", methods=["GET", "POST"])
 def nuovo_articolo():
+    errore = None
 
     if request.method == "POST":
 
-        dati = (
-            request.form["codice"],
-            request.form["nome"],
-            request.form["descrizione"],
-            request.form["quantita"],
-            request.form["scorta_minima"],
-            request.form["unita_misura"],
-            request.form["categoria_id"]
-        )
+        try:
+            quantita = float(request.form["quantita"])
+            scorta_minima = float(request.form["scorta_minima"])
+        except ValueError:
+            errore = "Quantità e scorta minima devono essere valori numerici."
+        else:
+            if quantita < 0 or scorta_minima < 0:
+                errore = "Quantità e scorta minima non possono essere negative."
+            else:
+                dati = (
+                    request.form["codice"],
+                    request.form["nome"],
+                    request.form["descrizione"],
+                    quantita,
+                    scorta_minima,
+                    request.form["unita_misura"],
+                    request.form["categoria_id"]
+                )
 
-        inserisci_articolo(dati)
+                inserisci_articolo(dati)
 
-        return redirect(url_for("home"))
+                return redirect(url_for("home"))
 
     categorie = get_categorie()
 
     return render_template(
         "nuovo_articolo.html",
-        categorie=categorie
+        categorie=categorie,
+        errore=errore
     )
-
 
 @app.route("/articoli/<int:id>")
 def dettaglio_articolo(id):
@@ -341,7 +354,7 @@ def aggiungi_foto(id):
 
 @app.route("/articoli/<int:articolo_id>/foto/<int:foto_id>/elimina", methods=["POST"])
 def elimina_foto(articolo_id, foto_id):
-    disattiva_foto_articolo(foto_id)
+    disattiva_foto_articolo(foto_id, articolo_id)
 
     return redirect(
         url_for("dettaglio_articolo", id=articolo_id)
@@ -350,22 +363,30 @@ def elimina_foto(articolo_id, foto_id):
 
 @app.route("/articoli/modifica/<int:id>", methods=["GET", "POST"])
 def modifica(id):
+    errore = None
 
     if request.method == "POST":
 
-        dati = (
-            request.form["codice"],
-            request.form["nome"],
-            request.form["descrizione"],
-            request.form["quantita"],
-            request.form["scorta_minima"],
-            request.form["unita_misura"],
-            request.form["categoria_id"]
-        )
+        try:
+            scorta_minima = float(request.form["scorta_minima"])
+        except ValueError:
+            errore = "La scorta minima deve essere un valore numerico."
+        else:
+            if scorta_minima < 0:
+                errore = "La scorta minima non può essere negativa."
+            else:
+                dati = (
+                    request.form["codice"],
+                    request.form["nome"],
+                    request.form["descrizione"],
+                    scorta_minima,
+                    request.form["unita_misura"],
+                    request.form["categoria_id"]
+                )
 
-        modifica_articolo(id, dati)
+                modifica_articolo(id, dati)
 
-        return redirect(url_for("home"))
+                return redirect(url_for("home"))
 
     articolo = get_articolo(id)
     categorie = get_categorie()
@@ -373,9 +394,9 @@ def modifica(id):
     return render_template(
         "modifica_articolo.html",
         articolo=articolo,
-        categorie=categorie
+        categorie=categorie,
+        errore=errore
     )
-
 
 @app.route("/articoli/disattiva/<int:id>", methods=["POST"])
 def disattiva(id):
@@ -401,28 +422,4 @@ def riattiva(id):
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

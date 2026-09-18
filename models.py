@@ -92,7 +92,6 @@ def modifica_articolo(id, dati):
         SET codice = %s,
             nome = %s,
             descrizione = %s,
-            quantita = %s,
             scorta_minima = %s,
             unita_misura = %s,
             categoria_id = %s
@@ -215,7 +214,7 @@ def inserisci_foto_articolo(articolo_id, nome_file, didascalia, principale):
 
 
 
-def disattiva_foto_articolo(foto_id):
+def disattiva_foto_articolo(foto_id, articolo_id):
     conn = get_db()
     cursor = conn.cursor()
 
@@ -224,7 +223,8 @@ def disattiva_foto_articolo(foto_id):
         SET attiva = FALSE,
             principale = FALSE
         WHERE id = %s
-    """, (foto_id,))
+          AND articolo_id = %s
+    """, (foto_id, articolo_id))
 
     conn.commit()
 

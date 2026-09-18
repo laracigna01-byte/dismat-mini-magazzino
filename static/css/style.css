@@ -178,8 +178,7 @@
     box-shadow: 0 12px 35px #0008;
 }
 
-.inventory-header,
-.card-header.bg-white {
+.inventory-header {
     min-height: 90px;
 
     padding: 20px 24px;
@@ -350,40 +349,9 @@
 }
 
 
-/* CHATBOT */
 
-.chat-button {
-    position: fixed;
 
-    right: 28px;
-    bottom: 28px;
 
-    background: #e72e3f;
-    color: #fff;
-
-    border: 0;
-    border-radius: 999px;
-
-    padding: 14px 25px;
-
-    font-weight: 600;
-
-    box-shadow:
-        0 0 12px #ff203c66,
-        0 0 30px #ff203c44;
-
-    transition: 0.2s;
-}
-
-.chat-button:hover {
-    color: #fff;
-
-    transform: translateY(-3px);
-
-    box-shadow:
-        0 0 18px #ff203c99,
-        0 0 38px #ff203c55;
-}
 
 
 /* TESTI BOOTSTRAP */
@@ -774,16 +742,6 @@
         white-space: nowrap;
     }
 
-    .chat-button {
-        right: 18px;
-        bottom: 18px;
-
-        padding: 11px 18px;
-
-        font-size: 14px;
-
-        z-index: 1050;
-    }
 }
 
 
@@ -910,21 +868,7 @@
         font-size: 11px !important;
     }
 
-    .chat-button {
-        right: 12px;
-        bottom: 12px;
 
-        padding: 8px 12px;
-
-        font-size: 12px;
-
-        border-radius: 999px;
-    }
-
-    .chat-button i {
-        margin-right: 5px !important;
-        font-size: 13px;
-    }
 }
 
 /* SCHEDA ARTICOLO */
@@ -1036,116 +980,42 @@
 }
 
 
-/* ================================
-   AUTENTICAZIONE
-================================ */
+/* =================================
+   AUTENTICAZIONE DISMAT
+================================= */
 
 .auth-page {
     min-height: 100vh;
-    background:
-        radial-gradient(circle at top, #1b1b1b 0, #080808 45%, #000 100%);
+
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
-}
 
-.auth-card {
-    width: 100%;
-    max-width: 430px;
-    background: #0d0d0d;
-    border: 1px solid #2a2a2a;
-    border-radius: 18px;
-    padding: 34px;
-    box-shadow: 0 20px 55px rgba(0, 0, 0, .45);
-}
-
-.auth-logo {
-    display: block;
-    max-width: 230px;
-    width: 75%;
-    margin: 0 auto 24px;
-}
-
-.auth-title {
-    color: #ffffff;
-    text-align: center;
-    font-weight: 800;
-    margin-bottom: 6px;
-}
-
-.auth-subtitle {
-    color: #8f98a6;
-    text-align: center;
-    margin-bottom: 28px;
-}
-
-.auth-card .form-label {
-    color: #f2f2f2;
-    font-weight: 600;
-}
-
-.auth-card .form-control {
-    background: #161616;
-    border: 1px solid #333;
-    color: #ffffff;
-    border-radius: 10px;
-    min-height: 48px;
-}
-
-.auth-card .form-control:focus {
-    background: #161616;
-    color: #ffffff;
-    border-color: #ffc107;
-    box-shadow: 0 0 0 .2rem rgba(255, 193, 7, .15);
-}
-
-.auth-button {
-    min-height: 48px;
-    border-radius: 10px;
-    font-weight: 800;
-}
-
-.auth-link {
-    color: #ffc107;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.auth-link:hover {
-    color: #ffd75e;
-}
-
-.nav-user {
-    margin-top: 14px;
-    padding: 8px 14px;
-    color: #ffc107;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-@media (max-width: 576px) {
-    .auth-card {
-        padding: 26px 20px;
-    }
-}
-
-/* ================================
-   AUTH - COMPATTA + NEON DISMAT
-================================ */
-
-.auth-page {
-    min-height: 100vh;
     padding: 18px;
+
     background:
-        radial-gradient(circle at 20% 20%, rgba(255, 20, 20, .10), transparent 28%),
-        radial-gradient(circle at 80% 80%, rgba(255, 193, 7, .06), transparent 28%),
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(255, 20, 20, .10),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 80% 80%,
+            rgba(255, 193, 7, .06),
+            transparent 28%
+        ),
         #050505;
 }
 
+
 .auth-card {
+    width: 100%;
     max-width: 380px;
+
     padding: 24px 26px;
+
+    background: #0d0d0d;
+
     border: 1px solid rgba(255, 45, 45, .65);
     border-radius: 16px;
 
@@ -1155,42 +1025,75 @@
         0 18px 45px rgba(0, 0, 0, .55);
 }
 
+
 .auth-logo {
+    display: block;
+
+    width: 75%;
     max-width: 185px;
-    margin-bottom: 14px;
+
+    margin: 0 auto 14px;
 }
 
+
 .auth-title {
-    font-size: 1.8rem;
     margin-bottom: 4px;
+
+    color: #ffffff;
+
+    text-align: center;
+
+    font-size: 1.8rem;
+    font-weight: 800;
 
     text-shadow:
         0 0 8px rgba(255, 45, 45, .35);
 }
 
+
 .auth-subtitle {
     margin-bottom: 20px;
+
     color: #a5a5b5;
+
+    text-align: center;
 }
+
 
 .auth-card .mb-3 {
     margin-bottom: 12px !important;
 }
 
+
 .auth-card .mb-4 {
     margin-bottom: 16px !important;
 }
 
+
 .auth-card .form-label {
     margin-bottom: 6px;
+
+    color: #f2f2f2;
+
+    font-weight: 600;
 }
+
 
 .auth-card .form-control {
     min-height: 42px;
+
+    background: #161616;
+    color: #ffffff;
+
+    border: 1px solid #333;
     border-radius: 9px;
 }
 
+
 .auth-card .form-control:focus {
+    background: #161616;
+    color: #ffffff;
+
     border-color: #ff3131;
 
     box-shadow:
@@ -1198,12 +1101,18 @@
         0 0 12px rgba(255, 49, 49, .22);
 }
 
+
 .auth-button {
     min-height: 44px;
+
+    border-radius: 10px;
+
+    font-weight: 800;
 
     box-shadow:
         0 0 12px rgba(255, 193, 7, .28);
 }
+
 
 .auth-button:hover {
     box-shadow:
@@ -1211,14 +1120,88 @@
         0 0 22px rgba(255, 45, 45, .20);
 }
 
+
 .auth-link {
     color: #ff4040;
-    text-shadow: 0 0 6px rgba(255, 40, 40, .25);
+
+    text-decoration: none;
+    font-weight: 600;
+
+    text-shadow:
+        0 0 6px rgba(255, 40, 40, .25);
 }
+
 
 .auth-link:hover {
     color: #ffc107;
 }
+
+
+.nav-user {
+    margin-top: 14px;
+
+    padding: 8px 14px;
+
+    color: #ffc107;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+.password-toggle {
+    min-width: 48px;
+
+    background: #161616;
+    color: #ffc107;
+
+    border: 1px solid #333;
+    border-left: 0;
+}
+
+
+.password-toggle:hover {
+    background: #1d1d1d;
+    color: #ff3131;
+
+    box-shadow:
+        0 0 10px rgba(255, 49, 49, .25);
+}
+
+
+.input-group .form-control {
+    border-right: 0;
+}
+
+
+/* Autofill Chrome */
+
+.auth-card input:-webkit-autofill,
+.auth-card input:-webkit-autofill:hover,
+.auth-card input:-webkit-autofill:focus,
+.auth-card input:-webkit-autofill:active {
+    -webkit-text-fill-color: #ffffff !important;
+
+    -webkit-box-shadow:
+        0 0 0 1000px #161616 inset !important;
+
+    box-shadow:
+        0 0 0 1000px #161616 inset !important;
+
+    caret-color: #ffffff;
+
+    border-color: #333 !important;
+}
+
+
+.auth-card input:-webkit-autofill:focus {
+    border-color: #ff3131 !important;
+
+    -webkit-box-shadow:
+        0 0 0 1000px #161616 inset,
+        0 0 10px rgba(255, 49, 49, .25) !important;
+}
+
 
 @media (max-width: 576px) {
 
@@ -1229,6 +1212,7 @@
 
     .auth-card {
         max-width: 350px;
+
         padding: 20px;
         margin: 10px auto;
     }
@@ -1251,6 +1235,7 @@
     }
 }
 
+
 @media (max-height: 650px) {
 
     .auth-page {
@@ -1261,46 +1246,6 @@
         margin-top: 8px;
         margin-bottom: 8px;
     }
-}
-
-.password-toggle {
-    background: #161616;
-    color: #ffc107;
-    border: 1px solid #333;
-    border-left: 0;
-    min-width: 48px;
-}
-
-.password-toggle:hover {
-    background: #1d1d1d;
-    color: #ff3131;
-    box-shadow: 0 0 10px rgba(255, 49, 49, .25);
-}
-
-.input-group .form-control {
-    border-right: 0;
-}
-
-/* ================================
-   AUTOFILL CHROME - TEMA DISMAT
-================================ */
-
-.auth-card input:-webkit-autofill,
-.auth-card input:-webkit-autofill:hover,
-.auth-card input:-webkit-autofill:focus,
-.auth-card input:-webkit-autofill:active {
-    -webkit-text-fill-color: #ffffff !important;
-    -webkit-box-shadow: 0 0 0 1000px #161616 inset !important;
-    box-shadow: 0 0 0 1000px #161616 inset !important;
-    caret-color: #ffffff;
-    border-color: #333 !important;
-}
-
-.auth-card input:-webkit-autofill:focus {
-    border-color: #ff3131 !important;
-    -webkit-box-shadow:
-        0 0 0 1000px #161616 inset,
-        0 0 10px rgba(255, 49, 49, .25) !important;
 }
 
 /* Miniatura articolo */
@@ -1326,56 +1271,48 @@
 }
 
 .assistant-martin {
-    border: 0;
-    background: transparent;
-    color: #fff;
-    font-weight: 700;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
+
+    background: transparent;
+    border: 0;
+
+    color: #f2f2f2;
+    font-weight: 700;
 
     cursor: pointer;
-
-    animation: martinFloat 3s ease-in-out infinite;
 }
 
+.assistant-martin > span {
+    margin-top: 6px;
 
+    color: #f2f2f2;
 
-
-
-@keyframes martinFloat {
-    0%, 100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-4px);
-    }
+    font-weight: 700;
+    text-align: center;
 }
-
 
 .assistant-panel {
-    position: absolute;
+    position: fixed;
+
+    right: 28px;
+    bottom: 125px;
 
     width: 380px;
-    height: 520px;
-
-    right: 0;
-    bottom: 105px;
+    height: min(520px, calc(100vh - 160px));
 
     display: none;
     flex-direction: column;
+
+    overflow: hidden;
 
     background: #0c0c0c;
 
     border: 1px solid #292929;
     border-top: 2px solid #ff3131;
-
     border-radius: 18px;
-
-    overflow: hidden;
 
     box-shadow:
         0 0 18px rgba(255, 45, 45, .18),
@@ -1386,46 +1323,69 @@
     display: flex;
 }
 
-
 .assistant-header {
+    min-height: 64px;
     padding: 15px 18px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
+    flex-shrink: 0;
+
+    background: #101010;
+
     border-bottom: 1px solid #252525;
 }
 
 .assistant-header strong {
     display: block;
+
     color: #ffc107;
+
+    font-size: 17px;
 }
 
 .assistant-header small {
+    display: block;
+
+    margin-top: 2px;
+
     color: #929292;
 }
 
 .assistant-close {
-    border: 0;
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     background: transparent;
+    border: 0;
+    border-radius: 50%;
 
     color: #aaa;
 
     font-size: 17px;
 }
 
+.assistant-close:hover {
+    background: #1f1f1f;
+    color: #ff3131;
+}
 
 .assistant-messages {
     flex: 1;
 
     padding: 16px;
 
-    overflow-y: auto;
-
     display: flex;
     flex-direction: column;
     gap: 10px;
+
+    overflow-y: auto;
 }
 
 .assistant-message {
@@ -1457,7 +1417,6 @@
     color: #fff;
 }
 
-
 .assistant-suggestions {
     padding: 8px 14px;
 
@@ -1468,20 +1427,18 @@
 }
 
 .assistant-suggestion {
-    border: 1px solid #343434;
+    padding: 6px 10px;
 
     background: #151515;
     color: #ddd;
 
+    border: 1px solid #343434;
     border-radius: 999px;
-
-    padding: 6px 10px;
 
     font-size: 11px;
 
     white-space: nowrap;
 }
-
 
 .assistant-form {
     padding: 12px;
@@ -1497,7 +1454,6 @@
     color: #fff;
 
     border: 1px solid #343434;
-
     border-radius: 10px;
 }
 
@@ -1510,153 +1466,7 @@
     box-shadow: none;
 }
 
-
-@media (max-width: 576px) {
-
-    .assistant-widget {
-        right: 12px;
-        bottom: 12px;
-    }
-
-    .assistant-panel {
-        width: calc(100vw - 24px);
-        height: 70vh;
-
-        right: 0;
-        bottom: 96px;
-    }
-
-
-}
-
-
-/* Header Assistente sempre visibile */
-.assistant-header {
-    flex-shrink: 0;
-    min-height: 64px;
-    background: #101010;
-    position: relative;
-    z-index: 2;
-}
-
-.assistant-header strong {
-    color: #ffc107;
-    font-size: 17px;
-}
-
-.assistant-header small {
-    display: block;
-    margin-top: 2px;
-}
-
-.assistant-close {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.assistant-close:hover {
-    background: #1f1f1f;
-    color: #ff3131;
-}
-
-
-/* =================================
-   FIX POSIZIONE PANNELLO MARTIN
-================================= */
-
-.assistant-panel {
-    position: fixed;
-
-    right: 28px;
-    bottom: 125px;
-
-    width: 380px;
-    height: min(520px, calc(100vh - 160px));
-
-    overflow: hidden;
-}
-
-.assistant-header {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-
-    flex-shrink: 0;
-
-    min-height: 64px;
-
-    padding: 15px 18px;
-
-    background: #101010;
-
-    border-bottom: 1px solid #252525;
-
-    position: relative;
-    z-index: 10;
-}
-
-@media (max-width: 576px) {
-
-    .assistant-panel {
-        right: 12px;
-        bottom: 100px;
-
-        width: calc(100vw - 24px);
-        height: min(70vh, 520px);
-    }
-
-}
-
-
-/* =================================
-   MARTIN - STILE METALLO DEFINITIVO
-================================= */
-
-
-
-
-
-
-
-.assistant-martin {
-    background: transparent;
-    border: 0;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    gap: 4px;
-
-    cursor: pointer;
-
-    transition: transform .2s ease;
-}
-
-
-.assistant-martin:hover {
-    transform: translateY(-2px);
-}
-
-
-.assistant-martin > span {
-    margin-top: 6px;
-
-    color: #f2f2f2;
-
-    font-weight: 700;
-    text-align: center;
-}
-
-
-
-
 @keyframes martinFloat {
-
     0%,
     100% {
         transform: translateY(0);
@@ -1667,43 +1477,21 @@
     }
 }
 
+@media (max-width: 576px) {
 
-/* =================================
-   MARTIN - MARTINETTO IDRAULICO
-================================= */
+    .assistant-widget {
+        right: 12px;
+        bottom: 12px;
+    }
 
+    .assistant-panel {
+        right: 12px;
+        bottom: 100px;
 
-
-/* CASCO */
-
-
-
-/* PISTONE DEL MARTINETTO */
-
-
-
-/* CORPO METALLICO */
-
-
-
-/* OCCHI */
-
-
-
-
-/* GILET GIALLO */
-
-
-
-
-/* BASE DEL MARTINETTO */
-
-
-
-/* MOVIMENTO LEGGERO */
-
-
-
+        width: calc(100vw - 24px);
+        height: min(70vh, 520px);
+    }
+}
 
 /* =================================
    MARTIN - MASCOTTE PNG DEFINITIVA
@@ -1733,5 +1521,4 @@
         drop-shadow(0 9px 16px rgba(0, 0, 0, .5))
         drop-shadow(0 0 12px rgba(255, 193, 7, .35));
 }
-
 

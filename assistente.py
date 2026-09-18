@@ -29,6 +29,56 @@ def somiglianza(testo, candidato):
     return max(punteggi)
 
 
+def trova_articoli_simili(testo):
+    articoli = get_articoli()
+    testo_norm = normalizza(testo)
+
+    parole_da_ignorare = {
+        "il", "lo", "la", "i", "gli", "le",
+        "di", "del", "della", "dei", "delle",
+        "in", "con", "per", "un", "una",
+        "quanto", "quanti", "quante", "abbiamo",
+        "cerca", "trova", "mostra"
+    }
+
+    parole_testo = set(
+        testo_norm.replace("-", " ").split()
+    ) - parole_da_ignorare
+
+    risultati = []
+    miglior_numero_parole = 0
+
+    for articolo in articoli:
+        codice = normalizza(str(articolo["codice"]))
+        nome = normalizza(articolo["nome"])
+
+        if codice in testo_norm or nome in testo_norm:
+            return [articolo]
+
+        parole_nome = set(
+            nome.replace("-", " ").split()
+        ) - parole_da_ignorare
+
+        numero_parole = len(
+            parole_testo.intersection(parole_nome)
+        )
+
+        if numero_parole > miglior_numero_parole:
+            risultati = [articolo]
+            miglior_numero_parole = numero_parole
+
+        elif (
+            numero_parole == miglior_numero_parole
+            and numero_parole > 0
+        ):
+            risultati.append(articolo)
+
+    if miglior_numero_parole > 0:
+        return risultati
+
+    return []
+
+
 def trova_articolo(testo):
     articoli = get_articoli()
     testo_norm = normalizza(testo)
@@ -208,7 +258,25 @@ def rispondi_assistente(messaggio):
 
         return "\n".join(righe)
 
-    articolo = trova_articolo(testo)
+    articoli_simili = trova_articoli_simili(testo)
+
+    if len(articoli_simili) > 1:
+        righe = [
+            "Ho trovato più articoli compatibili. Quale intendi?"
+        ]
+
+        for articolo_simile in articoli_simili:
+            righe.append(
+                f'- {articolo_simile["codice"]} - '
+                f'{articolo_simile["nome"]}'
+            )
+
+        return "\n".join(righe)
+
+    if len(articoli_simili) == 1:
+        articolo = articoli_simili[0]
+    else:
+        articolo = trova_articolo(testo)
 
     if articolo and (
         "fornit" in testo or
@@ -265,5 +333,4 @@ def rispondi_assistente(messaggio):
         "Prova a indicare il nome di un articolo, un fornitore "
         "oppure chiedimi informazioni su scorte o movimenti."
     )
-
 
