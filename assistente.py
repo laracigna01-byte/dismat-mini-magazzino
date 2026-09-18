@@ -184,6 +184,30 @@ def rispondi_assistente(messaggio):
 
         return "\n".join(righe)
 
+    frasi_elenco_fornitori = [
+        "quali sono i fornitori",
+        "elenco fornitori",
+        "mostra i fornitori",
+        "tutti i fornitori",
+        "fornitori registrati"
+    ]
+
+    if any(frase in testo for frase in frasi_elenco_fornitori):
+        fornitori = get_fornitori()
+
+        if not fornitori:
+            return "Non risultano fornitori registrati."
+
+        righe = ["Fornitori registrati:"]
+
+        for fornitore in fornitori:
+            righe.append(
+                f'- {fornitore["ragione_sociale"]} - '
+                f'{fornitore["telefono"] or "telefono non disponibile"}'
+            )
+
+        return "\n".join(righe)
+
     articolo = trova_articolo(testo)
 
     if articolo and (
@@ -241,4 +265,5 @@ def rispondi_assistente(messaggio):
         "Prova a indicare il nome di un articolo, un fornitore "
         "oppure chiedimi informazioni su scorte o movimenti."
     )
+
 
