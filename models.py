@@ -265,3 +265,79 @@ def inserisci_utente(nome, username, password_hash):
     conn.commit()
     cursor.close()
     conn.close()
+
+
+def get_movimenti():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT movimento.*,
+               articolo.codice AS codice_articolo,
+               articolo.nome AS articolo,
+               utente.nome AS utente
+        FROM movimento
+        INNER JOIN articolo
+            ON movimento.articolo_id = articolo.id
+        INNER JOIN utente
+            ON movimento.utente_id = utente.id
+        ORDER BY movimento.data_movimento DESC
+    """)
+
+    movimenti = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return movimenti
+
+
+def registra_movimento(articolo_id, utente_id, tipo, quantita, note):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    if tipo == "ENTRATA":
+        cursor.execute("""
+            UPDATE articolo
+            SET quantita = quantita + %s
+            WHERE id = %s
+              AND attivo = TRUE
+        """, (quantita, articolo_id))
+
+    elif tipo == "USCITA":
+        cursor.execute("""
+            UPDATE articolo
+            SET quantita = quantita - %s
+            WHERE id = %s
+              AND attivo = TRUE
+              AND quantita >= %s
+        """, (quantita, articolo_id, quantita))
+
+    else:
+        cursor.close()
+        conn.close()
+        return False
+
+    if cursor.rowcount == 0:
+        conn.rollback()
+        cursor.close()
+        conn.close()
+        return False
+
+    cursor.execute("""
+        INSERT INTO movimento
+        (articolo_id, utente_id, tipo, quantita, note)
+        VALUES (%s, %s, %s, %s, %s)
+    """, (
+        articolo_id,
+        utente_id,
+        tipo,
+        quantita,
+        note
+    ))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return True

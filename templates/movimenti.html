@@ -1,0 +1,272 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-heading">
+
+    <div class="eyebrow">
+        DISMAT • SISTEMA INTERNO
+    </div>
+
+    <h1 class="neon-title">
+        MOVIMENTI
+    </h1>
+
+    <p class="dashboard-subtitle">
+        Gestione delle entrate e delle uscite di magazzino
+    </p>
+
+</div>
+
+
+<div class="card inventory-card mb-4">
+
+    <div class="card-header inventory-header">
+
+        <div>
+            <div class="inventory-title">
+                NUOVO MOVIMENTO
+            </div>
+
+            <small class="inventory-subtitle">
+                Registra un'entrata o un'uscita di materiale
+            </small>
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        {% if errore %}
+            <div class="alert alert-danger">
+                {{ errore }}
+            </div>
+        {% endif %}
+
+        <form method="POST">
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+
+                    <label for="articolo_id"
+                           class="form-label">
+                        Articolo
+                    </label>
+
+                    <select class="form-select"
+                            id="articolo_id"
+                            name="articolo_id"
+                            required>
+
+                        <option value="">
+                            Seleziona articolo
+                        </option>
+
+                        {% for articolo in articoli %}
+                            <option value="{{ articolo.id }}">
+                                {{ articolo.codice }} - {{ articolo.nome }}
+                            </option>
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <label for="tipo"
+                           class="form-label">
+                        Tipo
+                    </label>
+
+                    <select class="form-select"
+                            id="tipo"
+                            name="tipo"
+                            required>
+
+                        <option value="ENTRATA">
+                            Entrata
+                        </option>
+
+                        <option value="USCITA">
+                            Uscita
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <label for="quantita"
+                           class="form-label">
+                        Quantità
+                    </label>
+
+                    <input type="number"
+                           class="form-control"
+                           id="quantita"
+                           name="quantita"
+                           min="0.01"
+                           step="0.01"
+                           required>
+
+                </div>
+
+
+                <div class="col-12">
+
+                    <label for="note"
+                           class="form-label">
+                        Nota
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           id="note"
+                           name="note"
+                           maxlength="255"
+                           placeholder="Nota opzionale">
+
+                </div>
+
+            </div>
+
+
+            <button type="submit"
+                    class="btn btn-warning add-button mt-4">
+
+                <i class="bi bi-arrow-left-right me-1"></i>
+                Registra movimento
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<div class="card inventory-card">
+
+    <div class="card-header inventory-header">
+
+        <div>
+            <div class="inventory-title">
+                STORICO MOVIMENTI
+            </div>
+
+            <small class="inventory-subtitle">
+                Elenco delle entrate e delle uscite registrate
+            </small>
+        </div>
+
+    </div>
+
+
+    {% if movimenti %}
+
+        <div class="mobile-scroll-hint">
+            <i class="bi bi-arrow-left-right"></i>
+            Scorri orizzontalmente per vedere tutte le colonne
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table inventory-table align-middle">
+
+                <thead>
+
+                    <tr>
+                        <th>Data</th>
+                        <th>Articolo</th>
+                        <th>Tipo</th>
+                        <th>Quantità</th>
+                        <th>Utente</th>
+                        <th>Note</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for movimento in movimenti %}
+
+                        <tr>
+
+                            <td>
+                                {{ movimento.data_movimento.strftime("%d/%m/%Y %H:%M") }}
+                            </td>
+
+                            <td>
+                                <strong>
+                                    {{ movimento.codice_articolo }}
+                                </strong>
+
+                                <br>
+
+                                <span class="text-secondary">
+                                    {{ movimento.articolo }}
+                                </span>
+                            </td>
+
+                            <td>
+
+                                {% if movimento.tipo == "ENTRATA" %}
+
+                                    <span class="badge text-bg-success">
+                                        Entrata
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge text-bg-danger">
+                                        Uscita
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+                                {{ movimento.quantita }}
+                            </td>
+
+                            <td>
+                                {{ movimento.utente }}
+                            </td>
+
+                            <td>
+                                {{ movimento.note or "-" }}
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <div class="card-body">
+
+            <p class="text-secondary mb-0">
+                Nessun movimento registrato.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

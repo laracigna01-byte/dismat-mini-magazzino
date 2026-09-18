@@ -17,7 +17,9 @@ from models import (
     inserisci_foto_articolo,
     disattiva_foto_articolo,
     get_utente_by_username,
-    inserisci_utente
+    inserisci_utente,
+    get_movimenti,
+    registra_movimento
 )
 
 app = Flask(__name__)
@@ -93,6 +95,44 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
+
+@app.route("/movimenti", methods=["GET", "POST"])
+def movimenti():
+    errore = None
+
+    if request.method == "POST":
+        articolo_id = request.form["articolo_id"]
+        tipo = request.form["tipo"]
+        quantita = float(request.form["quantita"])
+        note = request.form.get("note", "")
+
+        if quantita <= 0:
+            errore = "La quantità deve essere maggiore di zero."
+
+        else:
+            registrato = registra_movimento(
+                articolo_id,
+                session["utente_id"],
+                tipo,
+                quantita,
+                note
+            )
+
+            if registrato:
+                return redirect(url_for("movimenti"))
+
+            errore = "Movimento non registrato. Controlla la quantità disponibile."
+
+    articoli = get_articoli()
+    storico = get_movimenti()
+
+    return render_template(
+        "movimenti.html",
+        articoli=articoli,
+        movimenti=storico,
+        errore=errore
+    )
 
 
 @app.route("/")
@@ -247,6 +287,8 @@ def riattiva(id):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
 
 
 
