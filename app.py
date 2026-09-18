@@ -1,9 +1,10 @@
 ﻿import os
 from uuid import uuid4
 
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
+from assistente import rispondi_assistente
 from models import (
     get_articoli,
     get_articolo,
@@ -191,6 +192,18 @@ def movimenti():
         movimenti=storico,
         errore=errore
     )
+
+
+@app.route("/assistente", methods=["POST"])
+def assistente():
+    dati = request.get_json(silent=True) or {}
+    messaggio = dati.get("messaggio", "")
+
+    risposta = rispondi_assistente(messaggio)
+
+    return jsonify({
+        "risposta": risposta
+    })
 
 
 @app.route("/")
@@ -388,6 +401,9 @@ def riattiva(id):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
 
 
 

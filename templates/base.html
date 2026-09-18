@@ -149,17 +149,109 @@
 </div>
 
 
-<button class="btn chat-button">
-    <i class="bi bi-chat-dots me-2"></i>
-    Assistente
-</button>
+<div class="assistant-widget">
+
+    <button id="assistantToggle"
+            class="assistant-martin"
+            type="button"
+            title="Apri Assistente DISMAT">
+
+        <div class="martin-icon">
+            <div class="martin-helmet">DISMAT</div>
+            <div class="martin-jack">
+                <i class="bi bi-tools"></i>
+            </div>
+        </div>
+
+        <span>Martin</span>
+
+    </button>
+
+
+    <div id="assistantPanel"
+         class="assistant-panel">
+
+        <div class="assistant-header">
+
+            <div>
+                <strong>Martin</strong>
+                <small>Assistente DISMAT</small>
+            </div>
+
+            <button id="assistantClose"
+                    type="button"
+                    class="assistant-close"
+                    aria-label="Chiudi">
+                <i class="bi bi-x-lg"></i>
+            </button>
+
+        </div>
+
+
+        <div id="assistantMessages"
+             class="assistant-messages">
+
+            <div class="assistant-message bot">
+                Ciao, sono Martin. Posso aiutarti a cercare articoli,
+                fornitori, recapiti, scorte e movimenti.
+            </div>
+
+        </div>
+
+
+        <div class="assistant-suggestions">
+
+            <button type="button"
+                    class="assistant-suggestion"
+                    data-message="Quali articoli hanno scorta bassa?">
+                Scorte basse
+            </button>
+
+            <button type="button"
+                    class="assistant-suggestion"
+                    data-message="Mostrami gli ultimi movimenti">
+                Ultimi movimenti
+            </button>
+
+            <button type="button"
+                    class="assistant-suggestion"
+                    data-message="Chi fornisce ART001?">
+                Fornitore ART001
+            </button>
+
+        </div>
+
+
+        <form id="assistantForm"
+              class="assistant-form">
+
+            <input id="assistantInput"
+                   type="text"
+                   class="form-control"
+                   placeholder="Scrivi una domanda..."
+                   autocomplete="off"
+                   required>
+
+            <button type="submit"
+                    class="btn btn-warning">
+                <i class="bi bi-send-fill"></i>
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
 
 
 <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+<script src="{{ url_for('static', filename='js/assistente.js') }}"></script>
 
 </body>
 
 </html>
+
+
 
 
 
