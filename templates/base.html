@@ -53,7 +53,8 @@
                 Movimenti
             </a>
 
-            <a class="nav-link" href="#">
+            <a class="nav-link {% if request.endpoint in ['fornitori', 'nuovo_fornitore', 'modifica_fornitore_route'] %}active{% endif %}"
+               href="{{ url_for('fornitori') }}">
                 <i class="bi bi-truck me-2"></i>
                 Fornitori
             </a>
@@ -159,6 +160,7 @@
 </body>
 
 </html>
+
 
 
 

@@ -19,7 +19,14 @@ from models import (
     get_utente_by_username,
     inserisci_utente,
     get_movimenti,
-    registra_movimento
+    registra_movimento,
+    get_fornitori,
+    get_fornitore,
+    inserisci_fornitore,
+    modifica_fornitore,
+    get_fornitori_articolo,
+    collega_fornitore_articolo,
+    scollega_fornitore_articolo
 )
 
 app = Flask(__name__)
@@ -97,6 +104,57 @@ def logout():
     return redirect(url_for("login"))
 
 
+@app.route("/fornitori")
+def fornitori():
+    elenco = get_fornitori()
+
+    return render_template(
+        "fornitori.html",
+        fornitori=elenco
+    )
+
+
+@app.route("/fornitori/nuovo", methods=["GET", "POST"])
+def nuovo_fornitore():
+
+    if request.method == "POST":
+        dati = (
+            request.form["ragione_sociale"],
+            request.form.get("referente", ""),
+            request.form.get("telefono", ""),
+            request.form.get("email", "")
+        )
+
+        inserisci_fornitore(dati)
+
+        return redirect(url_for("fornitori"))
+
+    return render_template("nuovo_fornitore.html")
+
+
+@app.route("/fornitori/modifica/<int:id>", methods=["GET", "POST"])
+def modifica_fornitore_route(id):
+
+    if request.method == "POST":
+        dati = (
+            request.form["ragione_sociale"],
+            request.form.get("referente", ""),
+            request.form.get("telefono", ""),
+            request.form.get("email", "")
+        )
+
+        modifica_fornitore(id, dati)
+
+        return redirect(url_for("fornitori"))
+
+    fornitore = get_fornitore(id)
+
+    return render_template(
+        "modifica_fornitore.html",
+        fornitore=fornitore
+    )
+
+
 @app.route("/movimenti", methods=["GET", "POST"])
 def movimenti():
     errore = None
@@ -138,7 +196,20 @@ def movimenti():
 @app.route("/")
 def home():
     articoli = get_articoli()
-    return render_template("index.html", articoli=articoli)
+    movimenti = get_movimenti()
+
+    scorte_basse = sum(
+        1
+        for articolo in articoli
+        if articolo["quantita"] <= articolo["scorta_minima"]
+    )
+
+    return render_template(
+        "index.html",
+        articoli=articoli,
+        scorte_basse=scorte_basse,
+        movimenti_count=len(movimenti)
+    )
 
 
 @app.route("/articoli")
@@ -178,11 +249,42 @@ def nuovo_articolo():
 def dettaglio_articolo(id):
     articolo = get_articolo(id)
     foto = get_foto_articolo(id)
+    fornitori = get_fornitori()
+    fornitori_articolo = get_fornitori_articolo(id)
 
     return render_template(
         "dettaglio_articolo.html",
         articolo=articolo,
-        foto=foto
+        foto=foto,
+        fornitori=fornitori,
+        fornitori_articolo=fornitori_articolo
+    )
+
+
+@app.route("/articoli/<int:articolo_id>/fornitori", methods=["POST"])
+def associa_fornitore(articolo_id):
+    fornitore_id = request.form["fornitore_id"]
+
+    collega_fornitore_articolo(
+        articolo_id,
+        fornitore_id
+    )
+
+    return redirect(
+        url_for("dettaglio_articolo", id=articolo_id)
+    )
+
+
+@app.route("/articoli/<int:articolo_id>/fornitori/<int:fornitore_id>/rimuovi", methods=["POST"])
+def rimuovi_fornitore(articolo_id, fornitore_id):
+
+    scollega_fornitore_articolo(
+        articolo_id,
+        fornitore_id
+    )
+
+    return redirect(
+        url_for("dettaglio_articolo", id=articolo_id)
     )
 
 
@@ -286,6 +388,12 @@ def riattiva(id):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+
+
+
 
 
 

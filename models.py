@@ -347,3 +347,135 @@ def registra_movimento(articolo_id, utente_id, tipo, quantita, note):
 
     return True
 
+
+
+def get_fornitori():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT id,
+               ragione_sociale,
+               referente,
+               telefono,
+               email
+        FROM fornitore
+        ORDER BY ragione_sociale
+    """)
+
+    fornitori = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return fornitori
+
+
+def get_fornitore(id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT id,
+               ragione_sociale,
+               referente,
+               telefono,
+               email
+        FROM fornitore
+        WHERE id = %s
+    """, (id,))
+
+    fornitore = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    return fornitore
+
+
+def inserisci_fornitore(dati):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO fornitore
+        (ragione_sociale, referente, telefono, email)
+        VALUES (%s, %s, %s, %s)
+    """, dati)
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def modifica_fornitore(id, dati):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE fornitore
+        SET ragione_sociale = %s,
+            referente = %s,
+            telefono = %s,
+            email = %s
+        WHERE id = %s
+    """, dati + (id,))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def get_fornitori_articolo(articolo_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT fornitore.id,
+               fornitore.ragione_sociale,
+               fornitore.referente,
+               fornitore.telefono,
+               fornitore.email
+        FROM fornitore
+        INNER JOIN articolo_fornitore
+            ON fornitore.id = articolo_fornitore.fornitore_id
+        WHERE articolo_fornitore.articolo_id = %s
+        ORDER BY fornitore.ragione_sociale
+    """, (articolo_id,))
+
+    fornitori = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return fornitori
+
+
+def collega_fornitore_articolo(articolo_id, fornitore_id):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT IGNORE INTO articolo_fornitore
+        (articolo_id, fornitore_id)
+        VALUES (%s, %s)
+    """, (articolo_id, fornitore_id))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def scollega_fornitore_articolo(articolo_id, fornitore_id):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        DELETE FROM articolo_fornitore
+        WHERE articolo_id = %s
+          AND fornitore_id = %s
+    """, (articolo_id, fornitore_id))
+
+    conn.commit()
+    cursor.close()
+    conn.close()

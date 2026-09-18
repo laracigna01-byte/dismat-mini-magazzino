@@ -1,0 +1,117 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-heading">
+
+    <div class="eyebrow">
+        DISMAT • SISTEMA INTERNO
+    </div>
+
+    <h1 class="neon-title">
+        NUOVO FORNITORE
+    </h1>
+
+    <p class="dashboard-subtitle">
+        Inserimento di un nuovo fornitore
+    </p>
+
+</div>
+
+
+<div class="card inventory-card">
+
+    <div class="card-header inventory-header">
+
+        <div>
+            <div class="inventory-title">
+                DATI FORNITORE
+            </div>
+
+            <small class="inventory-subtitle">
+                Inserisci le informazioni del fornitore
+            </small>
+        </div>
+
+    </div>
+
+
+    <div class="card-body p-4">
+
+        <form method="POST">
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label class="form-label">
+                        Ragione sociale
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           name="ragione_sociale"
+                           required>
+                </div>
+
+
+                <div class="col-md-6">
+                    <label class="form-label">
+                        Referente
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           name="referente">
+                </div>
+
+
+                <div class="col-md-6">
+                    <label class="form-label">
+                        Telefono
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           name="telefono">
+                </div>
+
+
+                <div class="col-md-6">
+                    <label class="form-label">
+                        Email
+                    </label>
+
+                    <input type="email"
+                           class="form-control"
+                           name="email">
+                </div>
+
+            </div>
+
+
+            <div class="d-flex flex-wrap gap-3 mt-4">
+
+                <button type="submit"
+                        class="btn btn-warning add-button">
+
+                    <i class="bi bi-check-lg me-1"></i>
+                    Salva fornitore
+
+                </button>
+
+                <a href="{{ url_for('fornitori') }}"
+                   class="btn btn-outline-light add-button">
+
+                    Annulla
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

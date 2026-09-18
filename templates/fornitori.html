@@ -1,0 +1,123 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-heading">
+
+    <div class="eyebrow">
+        DISMAT • SISTEMA INTERNO
+    </div>
+
+    <h1 class="neon-title">
+        FORNITORI
+    </h1>
+
+    <p class="dashboard-subtitle">
+        Gestione dei fornitori del magazzino
+    </p>
+
+</div>
+
+
+<div class="card inventory-card">
+
+    <div class="card-header inventory-header">
+
+        <div>
+            <div class="inventory-title">
+                ELENCO FORNITORI
+            </div>
+
+            <small class="inventory-subtitle">
+                Fornitori registrati nel sistema
+            </small>
+        </div>
+
+        <a href="{{ url_for('nuovo_fornitore') }}"
+           class="btn btn-warning add-button">
+
+            <i class="bi bi-plus-lg me-1"></i>
+            Nuovo fornitore
+
+        </a>
+
+    </div>
+
+
+    {% if fornitori %}
+
+    <div class="mobile-scroll-hint">
+        <i class="bi bi-arrow-left-right"></i>
+        Scorri orizzontalmente per vedere tutte le colonne
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table inventory-table align-middle">
+
+            <thead>
+                <tr>
+                    <th>Ragione sociale</th>
+                    <th>Referente</th>
+                    <th>Telefono</th>
+                    <th>Email</th>
+                    <th class="actions-cell">Azioni</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for fornitore in fornitori %}
+
+                <tr>
+
+                    <td class="fw-semibold">
+                        {{ fornitore.ragione_sociale }}
+                    </td>
+
+                    <td>
+                        {{ fornitore.referente or "-" }}
+                    </td>
+
+                    <td>
+                        {{ fornitore.telefono or "-" }}
+                    </td>
+
+                    <td>
+                        {{ fornitore.email or "-" }}
+                    </td>
+
+                    <td class="actions-cell">
+
+                        <a href="{{ url_for('modifica_fornitore_route', id=fornitore.id) }}"
+                           class="btn btn-warning pill-ui">
+
+                            Modifica
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="card-body">
+        <p class="text-secondary mb-0">
+            Nessun fornitore registrato.
+        </p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
