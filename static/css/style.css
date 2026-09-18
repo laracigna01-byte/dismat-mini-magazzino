@@ -1302,3 +1302,14 @@
         0 0 0 1000px #161616 inset,
         0 0 10px rgba(255, 49, 49, .25) !important;
 }
+
+/* Miniatura articolo */
+.article-thumb {
+    width: 58px;
+    height: 58px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #333;
+    display: block;
+}
+

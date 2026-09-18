@@ -12,10 +12,15 @@ def get_articoli():
                articolo.quantita,
                articolo.scorta_minima,
                articolo.unita_misura,
-               categoria.nome AS categoria
+               categoria.nome AS categoria,
+               foto_articolo.nome_file AS foto_principale
         FROM articolo
         INNER JOIN categoria
             ON articolo.categoria_id = categoria.id
+        LEFT JOIN foto_articolo
+            ON articolo.id = foto_articolo.articolo_id
+            AND foto_articolo.principale = TRUE
+            AND foto_articolo.attiva = TRUE
         WHERE articolo.attivo = TRUE
     """)
 
@@ -341,3 +346,4 @@ def registra_movimento(articolo_id, utente_id, tipo, quantita, note):
     conn.close()
 
     return True
+

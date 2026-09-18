@@ -214,8 +214,7 @@ def aggiungi_foto(id):
     didascalia = request.form.get("didascalia", "")
     principale = 1 if request.form.get("principale") else 0
 
-    inserisci_foto_articolo,
-    disattiva_foto_articolo(
+    inserisci_foto_articolo(
         id,
         nome_file,
         didascalia,
@@ -287,6 +286,7 @@ def riattiva(id):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
 
 
 

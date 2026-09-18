@@ -57,6 +57,7 @@
 
             <thead>
                 <tr>
+                                        <th scope="col">Foto</th>
                     <th scope="col">Codice</th>
                     <th scope="col">Articolo</th>
                     <th scope="col">Categoria</th>
@@ -71,6 +72,16 @@
                 {% for articolo in articoli %}
 
                 <tr>
+
+                    <td>
+                        {% if articolo.foto_principale %}
+                            <img src="{{ url_for('static', filename='uploads/' ~ articolo.foto_principale) }}"
+                                 alt="{{ articolo.nome }}"
+                                 class="article-thumb">
+                        {% else %}
+                            <span class="text-secondary">—</span>
+                        {% endif %}
+                    </td>
 
                     <td class="article-code">
                         {{ articolo.codice }}
@@ -161,4 +172,6 @@
 </div>
 
 {% endblock %}
+
+
 
