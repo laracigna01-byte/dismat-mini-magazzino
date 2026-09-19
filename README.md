@@ -146,3 +146,226 @@ I diagrammi completi sono disponibili in:
 
 [docs/diagrammi.md](docs/diagrammi.md)
 
+
+---
+
+# Diagrammi UML e modello ER
+
+## Use Case Diagram
+
+```mermaid
+flowchart LR
+    U([Utente])
+
+    U --> A[Registrazione e Login]
+    U --> B[Visualizza Dashboard]
+    U --> C[Gestisce Articoli]
+    U --> D[Gestisce Fotografie]
+    U --> E[Consulta Archivio]
+    U --> F[Registra Movimenti]
+    U --> G[Gestisce Fornitori]
+    U --> H[Associa Fornitori agli Articoli]
+    U --> I[Usa Assistente Martin]
+    U --> J[Cambia Tema]
+    U --> K[Logout]
+```
+
+## Activity Diagram - Registrazione di un movimento
+
+```mermaid
+flowchart TD
+    A([Inizio]) --> B[Apri Movimenti]
+    B --> C[Seleziona articolo]
+    C --> D[Seleziona Entrata o Uscita]
+    D --> E[Inserisce quantita]
+
+    E --> F{Quantita valida?}
+
+    F -- No --> G[Mostra errore]
+    G --> E
+
+    F -- Si --> H{Tipo movimento}
+
+    H -- Entrata --> I[Aumenta giacenza]
+    H -- Uscita --> J{Disponibilita sufficiente?}
+
+    J -- No --> G
+    J -- Si --> K[Diminuisce giacenza]
+
+    I --> L[Registra movimento]
+    K --> L
+
+    L --> M[Commit database]
+    M --> N[Mostra storico aggiornato]
+    N --> O([Fine])
+```
+
+## Sequence Diagram - Movimento
+
+```mermaid
+sequenceDiagram
+    actor U as Utente
+    participant V as View
+    participant C as app.py
+    participant M as models.py
+    participant DB as MySQL
+
+    U->>V: Compila form movimento
+    V->>C: POST /movimenti
+    C->>C: Valida i dati
+    C->>M: registra_movimento()
+
+    alt ENTRATA
+        M->>DB: UPDATE articolo + quantita
+    else USCITA
+        M->>DB: UPDATE articolo - quantita
+    end
+
+    M->>DB: INSERT movimento
+    M->>DB: COMMIT
+
+    DB-->>M: Operazione completata
+    M-->>C: True
+    C-->>V: Redirect
+    V-->>U: Storico aggiornato
+```
+
+## Sequence Diagram - Assistente Martin
+
+```mermaid
+sequenceDiagram
+    actor U as Utente
+    participant JS as assistente.js
+    participant C as app.py
+    participant A as assistente.py
+    participant M as models.py
+    participant DB as MySQL
+
+    U->>JS: Scrive una domanda
+    JS->>C: POST /assistente
+    C->>A: rispondi_assistente()
+    A->>A: Interpreta la richiesta
+    A->>M: Richiede dati
+    M->>DB: Query parametrizzata
+    DB-->>M: Risultato
+    M-->>A: Dati
+    A-->>C: Risposta controllata
+    C-->>JS: JSON
+    JS-->>U: Visualizza risposta
+```
+
+## Architettura MVC
+
+```mermaid
+flowchart LR
+    U([Utente / Browser])
+
+    V[View<br/>templates + static]
+    C[Controller<br/>app.py]
+    M[Model<br/>models.py]
+    DB[(MySQL)]
+    A[Assistente<br/>assistente.py]
+
+    U --> V
+    V --> C
+    C --> M
+    M --> DB
+
+    C --> A
+    A --> M
+
+    DB --> M
+    M --> C
+    C --> V
+    V --> U
+```
+
+## Diagramma ER
+
+```mermaid
+erDiagram
+
+    CATEGORIA ||--o{ ARTICOLO : contiene
+    ARTICOLO ||--o{ FOTO_ARTICOLO : possiede
+    ARTICOLO ||--o{ MOVIMENTO : riguarda
+    UTENTE ||--o{ MOVIMENTO : registra
+    ARTICOLO ||--o{ ARTICOLO_FORNITORE : associa
+    FORNITORE ||--o{ ARTICOLO_FORNITORE : associa
+
+    CATEGORIA {
+        int id PK
+        varchar nome
+        varchar descrizione
+    }
+
+    ARTICOLO {
+        int id PK
+        varchar codice
+        varchar nome
+        text descrizione
+        decimal quantita
+        decimal scorta_minima
+        varchar unita_misura
+        int categoria_id FK
+        boolean attivo
+    }
+
+    FORNITORE {
+        int id PK
+        varchar ragione_sociale
+        varchar referente
+        varchar telefono
+        varchar email
+    }
+
+    ARTICOLO_FORNITORE {
+        int articolo_id PK, FK
+        int fornitore_id PK, FK
+    }
+
+    FOTO_ARTICOLO {
+        int id PK
+        int articolo_id FK
+        varchar nome_file
+        varchar didascalia
+        boolean principale
+        boolean attiva
+    }
+
+    MOVIMENTO {
+        int id PK
+        int articolo_id FK
+        int utente_id FK
+        varchar tipo
+        decimal quantita
+        datetime data_movimento
+        varchar note
+    }
+
+    UTENTE {
+        int id PK
+        varchar username
+        varchar password_hash
+        varchar nome
+    }
+```
+
+## Cardinalita del database
+
+```text
+CATEGORIA  1 ----- N  ARTICOLO
+
+ARTICOLO   1 ----- N  FOTO_ARTICOLO
+
+ARTICOLO   1 ----- N  MOVIMENTO
+
+UTENTE     1 ----- N  MOVIMENTO
+
+ARTICOLO   N ----- M  FORNITORE
+                  |
+                  |
+          ARTICOLO_FORNITORE
+```
+
+La relazione molti-a-molti tra `ARTICOLO` e `FORNITORE` viene risolta attraverso la tabella associativa `ARTICOLO_FORNITORE`.
+
