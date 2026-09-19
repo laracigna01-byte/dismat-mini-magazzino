@@ -1,7 +1,7 @@
 ﻿import os
 from uuid import uuid4
 
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 from assistente import rispondi_assistente
@@ -36,13 +36,45 @@ app.secret_key = os.getenv("SECRET_KEY")
 # Dimensione massima consentita per i file caricati: 5 MB
 app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 
+PRIVATE_UPLOAD_DIR = os.path.join(
+    app.root_path,
+    "uploads",
+    "private"
+)
+
+os.makedirs(PRIVATE_UPLOAD_DIR, exist_ok=True)
+
 
 @app.before_request
 def richiedi_login():
-    pagine_pubbliche = ["login", "registrazione", "static"]
+    pagine_pubbliche = ["login", "registrazione", "static", "robots_txt"]
 
     if request.endpoint not in pagine_pubbliche and "utente_id" not in session:
         return redirect(url_for("login"))
+
+
+@app.route("/robots.txt")
+def robots_txt():
+    return send_from_directory(
+        app.root_path,
+        "robots.txt"
+    )
+
+
+@app.route("/files/private/<path:filename>")
+def file_privato(filename):
+    response = send_from_directory(
+        PRIVATE_UPLOAD_DIR,
+        filename
+    )
+
+    response.headers["X-Robots-Tag"] = (
+        "noindex, noimageindex, noarchive, nosnippet"
+    )
+
+    response.headers["Cache-Control"] = "private, no-store"
+
+    return response
 
 
 @app.route("/registrazione", methods=["GET", "POST"])
@@ -331,9 +363,7 @@ def aggiungi_foto(id):
     nome_file = f"{uuid4().hex}_{nome_originale}"
 
     percorso = os.path.join(
-        app.root_path,
-        "static",
-        "uploads",
+        PRIVATE_UPLOAD_DIR,
         nome_file
     )
 
@@ -422,4 +452,9 @@ def riattiva(id):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+
+
 

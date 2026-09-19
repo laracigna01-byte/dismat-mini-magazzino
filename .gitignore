@@ -4,3 +4,7 @@ __pycache__/
 static/uploads/*
 !static/uploads/.gitkeep
 desktop.ini
+
+# File privati caricati dagli utenti
+uploads/private/*
+!uploads/private/.gitkeep

@@ -279,7 +279,7 @@
 
                 <div class="article-photo-card">
 
-                    <img src="{{ url_for('static', filename='uploads/' ~ immagine.nome_file) }}"
+                    <img src="{{ url_for('file_privato', filename=immagine.nome_file) }}"
                          alt="{{ immagine.didascalia or articolo.nome }}"
                          class="article-photo">
 
@@ -403,6 +403,7 @@
 </div>
 
 {% endblock %}
+
 
 
 

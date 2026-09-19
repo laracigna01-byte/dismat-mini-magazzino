@@ -75,7 +75,7 @@
 
                     <td>
                         {% if articolo.foto_principale %}
-                            <img src="{{ url_for('static', filename='uploads/' ~ articolo.foto_principale) }}"
+                            <img src="{{ url_for('file_privato', filename=articolo.foto_principale) }}"
                                  alt="{{ articolo.nome }}"
                                  class="article-thumb">
                         {% else %}
@@ -172,6 +172,7 @@
 </div>
 
 {% endblock %}
+
 
 
 
