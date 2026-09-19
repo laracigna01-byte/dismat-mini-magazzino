@@ -129,3 +129,20 @@ dismat-magazzino/
 |-- .gitignore
 |-- requirements.txt
 `-- README.md
+
+## Diagrammi UML e modello ER
+
+La documentazione di progetto comprende:
+
+- Use Case Diagram;
+- Activity Diagram;
+- Sequence Diagram dei movimenti;
+- Sequence Diagram dell'assistente Martin;
+- schema dell'architettura MVC;
+- diagramma ER del database;
+- cardinalita delle relazioni.
+
+I diagrammi completi sono disponibili in:
+
+[docs/diagrammi.md](docs/diagrammi.md)
+
